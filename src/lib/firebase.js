@@ -9,14 +9,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBFh_EVhjXHRTz2EDo0ju57WjsmbkgG5Dk",
-  authDomain: "fir-2f4c1.firebaseapp.com",
-  projectId: "fir-2f4c1",
-  storageBucket: "fir-2f4c1.appspot.com",
-  messagingSenderId: "148026687693",
-  appId: "1:148026687693:web:f98038f8d9e256f1f12984"
+  apiKey: "AIzaSyBE82WHY6kUmmPUtk60ifyIjKBB0hPIrBk",
+  authDomain: "todo-f759f.firebaseapp.com",
+  projectId: "todo-f759f",
+  storageBucket: "todo-f759f.appspot.com",
+  messagingSenderId: "120115530468",
+  appId: "1:120115530468:web:21538574e922737e27baf1"
 };
-
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 
@@ -59,5 +58,29 @@ export const clearFirebaseItem = async (item) => {
   }).catch(function (err) {
     console.log(err);
   });
-  
 };
+
+export const uiConfig = {
+  signInFlow: 'popup',
+  signInSuccessUrl: "/",
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+  ],
+}
+
+export const storeUserInfo = async (user) => {
+  const { uid } = user;
+  const userDoc = await db.collection("users").doc(uid).get();
+  if (!userDoc.exists) {
+    await db.collection("users").doc(uid).set({ name: user.displayName });
+    return {
+      name: user.displayName,
+      id: uid,
+    };
+  } else {
+    return {
+      id: uid,
+      ...userDoc.data(),
+    };
+  }
+}  
